@@ -1,50 +1,31 @@
-# Welcome to your Expo app 👋
+#  Smart Helmet Companion App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Đây là kho lưu trữ mã nguồn cho ứng dụng di động (Mobile App) thuộc đồ án Nón Bảo Hiểm Thông Minh. Ứng dụng đóng vai trò là bảng điều khiển trung tâm (Dashboard), kết nối và tương tác trực tiếp với phần cứng trên xe và nón bảo hiểm.
 
-## Get started
+*(Lưu ý: Mã nguồn Firmware điều khiển vi mạch ESP-IDF được đặt ở một kho lưu trữ riêng biệt).*
 
-1. Install dependencies
+##  Tính năng chính của App
+- **Giám sát thời gian thực:** Cập nhật liên tục dữ liệu từ các cảm biến trên nón (MPU6050, MQ-3) thông qua kết nối Bluetooth Low Energy (BLE).
+- **Cảnh báo an toàn (SOS):** Nhận diện tín hiệu va đập/té ngã và nồng độ cồn vượt mức để hiển thị cảnh báo Pop-up ngay trên màn hình.
+- **Bản đồ định vị:** Hiển thị tọa độ GPS chính xác của người dùng dựa trên dữ liệu từ module NEO-6M.
+- **Điều khiển phương tiện:** Tích hợp các nút chức năng để chủ xe cấp lệnh mở khóa (0x01), khóa xe (0x00), hoặc mở khóa khẩn cấp (0x02) truyền thẳng xuống mạch Relay trên xe.
+- **Đồng bộ Đám mây:** Lưu trữ lịch sử dữ liệu và trạng thái hệ thống lên Firebase Realtime Database để người thân có thể theo dõi từ xa.
 
+##  Công nghệ sử dụng
+- **Framework:** React Native & Expo.
+- **Kết nối phần cứng:** `react-native-ble-plx` (Xử lý giao tiếp BLE).
+- **Cơ sở dữ liệu:** Firebase Realtime Database.
+- **Biểu đồ & Bản đồ:** `react-native-chart-kit`, Google Maps Integration.
+
+##  Hướng dẫn cài đặt & Chạy thử nghiệm
+
+### Yêu cầu môi trường
+- Đã cài đặt [Node.js](https://nodejs.org/) (Khuyên dùng bản LTS).
+- Cài đặt ứng dụng **Expo Go** trên thiết bị di động (Android / iOS).
+
+### Để chạy App
+1. Clone dự án về máy tính:
    ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+   git clone [https://github.com/tho2495032-gif/Smart_Helmet_app.git](https://github.com/tho2495032-gif/Smart_Helmet_app.git)
+   cd Smart_Helmet_app
+2. Có thể tải file đã xuất .apk
