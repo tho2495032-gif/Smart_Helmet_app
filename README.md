@@ -1,31 +1,71 @@
-#  Smart Helmet Companion App
+# Smart Helmet App (Android)
 
-Đây là kho lưu trữ mã nguồn cho ứng dụng di động (Mobile App) thuộc đồ án Nón Bảo Hiểm Thông Minh. Ứng dụng đóng vai trò là bảng điều khiển trung tâm (Dashboard), kết nối và tương tác trực tiếp với phần cứng trên xe và nón bảo hiểm.
+Ứng dụng Android thuộc đồ án Nón Bảo Hiểm Thông Minh. App đọc dữ liệu thiết bị từ Firebase Realtime Database, hiển thị trạng thái và lịch sử, đồng thời gửi cảnh báo khi phát hiện nồng độ cồn hoặc va đập. Mã nguồn firmware ESP-IDF được quản lý ở repository riêng.
 
-*(Lưu ý: Mã nguồn Firmware điều khiển vi mạch ESP-IDF được đặt ở một kho lưu trữ riêng biệt).*
+## Tính năng
 
-##  Tính năng chính của App
-- **Giám sát thời gian thực:** Cập nhật liên tục dữ liệu từ các cảm biến trên nón (MPU6050, MQ-3) thông qua kết nối Bluetooth Low Energy (BLE).
-- **Cảnh báo an toàn (SOS):** Nhận diện tín hiệu va đập/té ngã và nồng độ cồn vượt mức để hiển thị cảnh báo Pop-up ngay trên màn hình.
-- **Bản đồ định vị:** Hiển thị tọa độ GPS chính xác của người dùng dựa trên dữ liệu từ module NEO-6M.
-- **Điều khiển phương tiện:** Tích hợp các nút chức năng để chủ xe cấp lệnh mở khóa (0x01), khóa xe (0x00), hoặc mở khóa khẩn cấp (0x02) truyền thẳng xuống mạch Relay trên xe.
-- **Đồng bộ Đám mây:** Lưu trữ lịch sử dữ liệu và trạng thái hệ thống lên Firebase Realtime Database để người thân có thể theo dõi từ xa.
+- Đăng nhập, đăng ký và khôi phục mật khẩu qua Firebase Authentication.
+- Dashboard hiển thị telemetry và biểu đồ cảm biến từ Firebase Realtime Database.
+- Cảnh báo trong app và notification khi phát hiện sự cố.
+- Bản đồ hiển thị vị trí GPS lấy từ telemetry Firebase.
+- Lịch sử sự kiện và trang hồ sơ thiết bị.
+- Các nút điều khiển khóa/mở khóa và Bluetooth hiện chỉ là giao diện mẫu; thao tác sẽ báo chức năng đang phát triển.
 
-##  Công nghệ sử dụng
-- **Framework:** React Native & Expo.
-- **Kết nối phần cứng:** `react-native-ble-plx` (Xử lý giao tiếp BLE).
-- **Cơ sở dữ liệu:** Firebase Realtime Database.
-- **Biểu đồ & Bản đồ:** `react-native-chart-kit`, Google Maps Integration.
+## Công nghệ
 
-##  Hướng dẫn cài đặt & Chạy thử nghiệm
+- React Native, Expo SDK 54 và TypeScript.
+- Firebase Authentication, Realtime Database và Firestore.
+- Expo Notifications, React Native WebView và React Native Chart Kit.
 
-### Yêu cầu môi trường
-- Đã cài đặt [Node.js](https://nodejs.org/) (Khuyên dùng bản LTS).
-- Cài đặt ứng dụng **Expo Go** trên thiết bị di động (Android / iOS).
+## Cấu trúc mã nguồn
 
-### Để chạy App
-1. Clone dự án về máy tính:
-   ```bash
-   git clone [https://github.com/tho2495032-gif/Smart_Helmet_app.git](https://github.com/tho2495032-gif/Smart_Helmet_app.git)
-   cd Smart_Helmet_app
-2. Có thể tải file đã xuất .apk
+```text
+app/                         Expo Router: route và layout
+src/
+├── components/              UI theo module (auth, home, history, profile)
+├── config/                  Khởi tạo Firebase và Auth native
+├── hooks/                   Logic tải dữ liệu theo màn hình
+├── screens/                 Nội dung các màn hình
+├── types/                   Kiểu dữ liệu dùng chung
+└── utils/                   Helper thuần (bản đồ, sự kiện)
+```
+
+`app/` giữ các route mỏng; phần màn hình và logic chính nằm trong `src/`.
+
+## Yêu cầu
+
+- Node.js phiên bản LTS và npm.
+- Android Studio cùng Android SDK, hoặc thiết bị Android đã bật USB debugging.
+- Cấu hình Firebase Authentication và Realtime Database cho dự án.
+
+## Chạy trên Android
+
+```bash
+npm ci
+npm run android
+```
+
+Để mở Metro riêng:
+
+```bash
+npm start
+```
+
+## Tạo file APK
+
+Repository đã có profile `preview` trong `eas.json`, cấu hình xuất APK để cài trực tiếp lên thiết bị Android. Cài và đăng nhập EAS CLI, sau đó chạy:
+
+```bash
+npm install --global eas-cli
+eas login
+eas build --platform android --profile preview
+```
+
+EAS Build cung cấp liên kết tải APK sau khi quá trình build hoàn tất. [Tài liệu Expo về build APK](https://docs.expo.dev/build-reference/apk/).
+
+## Kiểm tra mã nguồn
+
+```bash
+npm run lint
+npx tsc --noEmit
+```
