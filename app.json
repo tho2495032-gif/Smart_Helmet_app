@@ -28,6 +28,12 @@
     "plugins": [
       "expo-router",
       [
+        "react-native-ble-plx",
+        {
+          "neverForLocation": true
+        }
+      ],
+      [
         "expo-splash-screen",
         {
           "image": "./assets/images/splash-icon.png",

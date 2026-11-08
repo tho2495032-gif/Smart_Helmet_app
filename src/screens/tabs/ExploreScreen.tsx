@@ -11,6 +11,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { createLeafletMapHtml } from '../../utils/mapHelpers';
 import { useExploreMap } from '../../hooks/useExploreMap';
+import { isPrivateMode } from '../../config/privacyConfig';
 import { WebView } from 'react-native-webview';
 
 export default function ExploreScreen() {
@@ -81,7 +82,9 @@ export default function ExploreScreen() {
               {activeHelmetName} ({activeHelmetId})
             </Text>
             <Text style={[styles.coordinateText, { color: theme.subText }]}>
-              Tọa độ: {location.lat.toFixed(6)}, {location.lng.toFixed(6)}
+              {isPrivateMode && location.timestamp === 0
+                ? 'Chưa có vị trí sự cố'
+                : `Tọa độ: ${location.lat.toFixed(6)}, ${location.lng.toFixed(6)}`}
             </Text>
           </View>
         </View>

@@ -3,6 +3,7 @@ import { useFocusEffect } from 'expo-router';
 import { onValue, ref } from 'firebase/database';
 import { useCallback, useState } from 'react';
 import { realtimeDB } from '../config/firebaseConfig';
+import { isPrivateMode } from '../config/privacyConfig';
 import type { HistoryEvent } from '../types/history';
 
 export function useHistoryLogs() {
@@ -39,7 +40,23 @@ export function useHistoryLogs() {
               const helmetEvents = data[helmetId];
               if (helmetEvents && typeof helmetEvents === 'object') {
                 Object.keys(helmetEvents).forEach((eventId) => {
-                  events.push({ id: eventId, helmet_id: helmetId, ...helmetEvents[eventId] });
+                  const event: HistoryEvent & Record<string, unknown> = {
+                    id: eventId,
+                    helmet_id: helmetId,
+                    ...helmetEvents[eventId],
+                  };
+                  if (isPrivateMode) {
+                    delete event.value;
+                    delete event.alcohol_raw;
+                    delete event.alcoholRaw;
+                    const description = `${event.sensor ?? ''} ${event.type ?? ''}`.toLowerCase();
+                    const isMpuEvent = /mpu6050|imu_impact|fall_confirmed|té ngã|va đập|impact|fall/.test(description);
+                    if (!isMpuEvent) {
+                      delete event.lat;
+                      delete event.lng;
+                    }
+                  }
+                  events.push(event);
                 });
               }
             });

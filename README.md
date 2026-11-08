@@ -63,6 +63,7 @@ eas build --platform android --profile preview
 
 EAS Build cung cấp liên kết tải APK sau khi quá trình build hoàn tất. [Tài liệu Expo về build APK](https://docs.expo.dev/build-reference/apk/).
 
+Có thể liên hệ Quân để lấy file .apk
 ## Kiểm tra mã nguồn
 
 ```bash

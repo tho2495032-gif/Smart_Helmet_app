@@ -18,20 +18,20 @@ export default function RenameModal({ visible, name, saving, isDark, theme, onCh
     <Modal visible={visible} transparent animationType="fade">
       <View style={styles.overlay}>
         <View style={[styles.card, { backgroundColor: theme.card }]}>
-          <Text style={[styles.title, { color: theme.text }]}>Äá»•i tÃªn nÃ³n</Text>
+          <Text style={[styles.title, { color: theme.text }]}>Đổi tên nón</Text>
           <TextInput
             style={[styles.input, { color: theme.text, borderColor: theme.border, backgroundColor: isDark ? '#2A2A2A' : '#FAFAFA' }]}
             value={name}
             onChangeText={onChangeName}
-            placeholder="TÃªn má»›i..."
+            placeholder="Tên mới..."
             placeholderTextColor="#888"
           />
           <View style={styles.buttons}>
             <TouchableOpacity style={styles.cancelButton} onPress={onCancel}>
-              <Text style={styles.cancelText}>Há»¦Y</Text>
+              <Text style={styles.cancelText}>HỦY</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.saveButton} onPress={onSave} disabled={saving}>
-              {saving ? <ActivityIndicator color="#FFF" /> : <Text style={styles.saveText}>LÆ¯U</Text>}
+              {saving ? <ActivityIndicator color="#FFF" /> : <Text style={styles.saveText}>LƯU</Text>}
             </TouchableOpacity>
           </View>
         </View>

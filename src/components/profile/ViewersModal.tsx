@@ -20,15 +20,15 @@ export default function ViewersModal({ visible, deviceId, loading, viewers, them
     <Modal visible={visible} transparent animationType="fade">
       <View style={styles.overlay}>
         <View style={[styles.card, { backgroundColor: theme.card }]}>
-          <Text style={[styles.title, { color: theme.text }]}>NgÆ°á»i Ä‘ang theo dÃµi {deviceId}</Text>
+          <Text style={[styles.title, { color: theme.text }]}>Người đang theo dõi {deviceId}</Text>
           <Text style={[styles.subtitle, { color: theme.subText }]}>
-            Chá»§ xe cÃ³ toÃ n quyá»n thu há»“i quyá»n theo dÃµi cá»§a tÃ i khoáº£n khÃ¡c
+            Chủ xe có toàn quyền thu hồi quyền theo dõi của tài khoản khác
           </Text>
 
           {loading ? (
             <ActivityIndicator style={{ marginVertical: 20 }} color="#007AFF" />
           ) : viewers.length === 0 ? (
-            <Text style={[styles.empty, { color: theme.subText }]}>ChÆ°a cÃ³ tÃ i khoáº£n nÃ o theo dÃµi nÃ³n nÃ y.</Text>
+            <Text style={[styles.empty, { color: theme.subText }]}>Chưa có tài khoản nào theo dõi nón này.</Text>
           ) : (
             <ScrollView style={{ maxHeight: 250, marginVertical: 10 }}>
               {viewers.map((viewer) => (
@@ -39,7 +39,7 @@ export default function ViewersModal({ visible, deviceId, loading, viewers, them
                   </View>
                   <TouchableOpacity style={styles.removeButton} onPress={() => onRemove(viewer)}>
                     <Ionicons name="person-remove" size={15} color="white" />
-                    <Text style={styles.removeText}>ÄÃ RA</Text>
+                    <Text style={styles.removeText}>ĐÁ RA</Text>
                   </TouchableOpacity>
                 </View>
               ))}
@@ -47,7 +47,7 @@ export default function ViewersModal({ visible, deviceId, loading, viewers, them
           )}
 
           <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-            <Text style={styles.closeText}>ÄÃ“NG</Text>
+            <Text style={styles.closeText}>ĐÓNG</Text>
           </TouchableOpacity>
         </View>
       </View>

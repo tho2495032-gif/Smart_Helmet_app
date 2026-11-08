@@ -3,6 +3,7 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import type { HistoryEvent } from '../../types/history';
 import { getEventColor } from '../../utils/eventHelpers';
+import { isPrivateMode } from '../../config/privacyConfig';
 
 type Props = {
   event: HistoryEvent;
@@ -14,9 +15,16 @@ type Props = {
 export default function HistoryEventCard({ event, currentHelmetId, theme, onOpenMap }: Props) {
   const isDanger = event.severity === 'danger' || event.severity === 'critical';
   const accentColor = getEventColor(event.type, event.severity);
+  const eventDescription = `${event.sensor ?? ''} ${event.type ?? ''}`.toLowerCase();
+  const isMpuEvent = /mpu6050|imu_impact|fall_confirmed|té ngã|va đập|impact|fall/.test(eventDescription);
+  const hasPrivateSafeMetric = event.impact_force || event.sensor || event.message;
+  const canShowLocation =
+    event.lat !== undefined &&
+    event.lng !== undefined &&
+    (!isPrivateMode || isMpuEvent);
   const timestamp = event.timestamp
     ? new Date(event.timestamp).toLocaleString('vi-VN')
-    : 'KhÃ´ng cÃ³ thá»i gian';
+    : 'Không có thời gian';
 
   return (
     <View style={[styles.card, { backgroundColor: theme.card, borderLeftColor: accentColor }]}>
@@ -24,7 +32,7 @@ export default function HistoryEventCard({ event, currentHelmetId, theme, onOpen
         <View style={[styles.colorDot, { backgroundColor: accentColor }]} />
         <Text style={[styles.personName, { color: theme.subText }]}>
           {event.helmet_id === currentHelmetId
-            ? `Äang chá»n (${event.helmet_id})`
+            ? `Đang chọn (${event.helmet_id})`
             : event.helmet_id}
         </Text>
       </View>
@@ -32,16 +40,16 @@ export default function HistoryEventCard({ event, currentHelmetId, theme, onOpen
       <View style={styles.cardHeader}>
         <Ionicons name={isDanger ? 'alert-circle' : 'warning'} size={22} color={accentColor} />
         <Text style={[styles.statusText, { color: accentColor }]}>
-          {event.type || 'Sá»± cá»‘ an toÃ n'}
+          {event.type || 'Sự cố an toàn'}
         </Text>
       </View>
 
-      {(event.impact_force || event.value || event.sensor || event.message) && (
+      {(isPrivateMode ? hasPrivateSafeMetric : event.impact_force || event.value || event.sensor || event.message) && (
         <View style={styles.metricRow}>
           {event.message && <Badge text={event.message} />}
-          {event.value && <Badge text={`Ná»“ng Ä‘á»™: ${event.value}`} />}
-          {event.impact_force && <Badge text={`Lá»±c va Ä‘áº­p: ${event.impact_force}`} />}
-          {event.sensor && <Badge text={`Cáº£m biáº¿n: ${event.sensor}`} sensor />}
+          {!isPrivateMode && event.value && <Badge text={`Nồng độ: ${event.value}`} />}
+          {event.impact_force && <Badge text={`Lực va đập: ${event.impact_force}`} />}
+          {event.sensor && <Badge text={`Cảm biến: ${event.sensor}`} sensor />}
         </View>
       )}
 
@@ -50,14 +58,14 @@ export default function HistoryEventCard({ event, currentHelmetId, theme, onOpen
         <Text style={[styles.timeText, { color: theme.subText }]}>{timestamp}</Text>
       </View>
 
-      {event.lat !== undefined && event.lng !== undefined && (
+      {canShowLocation && (
         <TouchableOpacity
           style={styles.mapLinkBtn}
           onPress={() => onOpenMap(event.lat!, event.lng!)}
           activeOpacity={0.8}
         >
           <Ionicons name="map-outline" size={17} color="#007AFF" />
-          <Text style={styles.locationText}>Chá»‰ Ä‘Æ°á»ng Ä‘áº¿n vá»‹ trÃ­ sá»± cá»‘</Text>
+          <Text style={styles.locationText}>Chỉ đường đến vị trí sự cố</Text>
         </TouchableOpacity>
       )}
     </View>

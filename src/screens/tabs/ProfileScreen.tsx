@@ -17,9 +17,9 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { auth, realtimeDB } from '../../config/firebaseConfig';
 import RenameModal from '../../components/profile/RenameModal';
 import ViewersModal, { type ProfileViewer } from '../../components/profile/ViewersModal';
+import { auth, realtimeDB } from '../../config/firebaseConfig';
 
 type HelmetDevice = {
   id: string;
@@ -552,7 +552,7 @@ export default function ProfileScreen() {
             <View style={styles.infoRow}>
               <Text style={[styles.infoLabel, { color: theme.subText }]}>Node Cụm Nón (Sensor)</Text>
               <Text style={[styles.infoValueWrap, { color: theme.text }]}>
-                ESP32-S3{'\n'}(MPU6050 + MQ3 + GPS)
+                ESP32-S3{'\n'}(MPU6050 + MQ3 + GPS + BLE + WIFI)
               </Text>
             </View>
 
@@ -561,7 +561,7 @@ export default function ProfileScreen() {
             <View style={styles.infoRow}>
               <Text style={[styles.infoLabel, { color: theme.subText }]}>Node Cụm Xe (Relay)</Text>
               <Text style={[styles.infoValueWrap, { color: theme.text }]}>
-                ESP32-C3{'\n'}(ESP-NOW + BLE)
+                ESP32-C3{'\n'}( OLED + Relay_5V + RFID + BLE)
               </Text>
             </View>
 

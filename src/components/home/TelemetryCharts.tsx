@@ -18,6 +18,7 @@ type Status = {
 
 type Props = {
   status: Status;
+  alcoholRawAvailable: boolean;
   alcoholHistory: number[];
   accelHistory: number[];
   gyroHistory: number[];
@@ -25,7 +26,15 @@ type Props = {
   theme: { card: string; chartBg: string; text: string; subText: string };
 };
 
-export default function TelemetryCharts({ status, alcoholHistory, accelHistory, gyroHistory, isDark, theme }: Props) {
+export default function TelemetryCharts({
+  status,
+  alcoholRawAvailable,
+  alcoholHistory,
+  accelHistory,
+  gyroHistory,
+  isDark,
+  theme,
+}: Props) {
   const labelColor = (opacity = 1) =>
     isDark ? `rgba(200, 200, 200, ${opacity})` : `rgba(102, 102, 102, ${opacity})`;
 
@@ -34,37 +43,54 @@ export default function TelemetryCharts({ status, alcoholHistory, accelHistory, 
       <View style={[styles.chartCard, { backgroundColor: theme.card }]}>
         <View style={styles.titleRow}>
           <Text style={[styles.chartTitle, { color: theme.text }]}>Alcohol Raw (MQ-3)</Text>
-          <Text style={[styles.currentAlcohol, { color: status.alcohol_detected ? '#FF3B30' : '#4CAF50' }]}>
-            {status.alcohol_raw}
+          <Text
+            style={[
+              styles.currentAlcohol,
+              {
+                color: alcoholRawAvailable
+                  ? status.alcohol_detected
+                    ? '#FF3B30'
+                    : '#4CAF50'
+                  : theme.subText,
+              },
+            ]}
+          >
+            {alcoholRawAvailable ? status.alcohol_raw : 'ẨN'}
           </Text>
         </View>
-        <LineChart
-          data={{ labels: chartLabels, datasets: [{ data: alcoholHistory }] }}
-          width={chartWidth}
-          height={150}
-          withDots={false}
-          chartConfig={{
-            backgroundColor: theme.chartBg,
-            backgroundGradientFrom: theme.chartBg,
-            backgroundGradientTo: theme.chartBg,
-            decimalPlaces: 0,
-            color: (opacity = 1) => `rgba(255, 59, 48, ${opacity})`,
-            labelColor,
-          }}
-          bezier
-          style={styles.chart}
-        />
-        <Text style={[styles.chartHint, { color: theme.subText }]}>Raw ADC dÃ¹ng Ä‘á»ƒ phÃ¢n loáº¡i cá»“n.</Text>
+        {alcoholRawAvailable ? (
+          <LineChart
+            data={{ labels: chartLabels, datasets: [{ data: alcoholHistory }] }}
+            width={chartWidth}
+            height={150}
+            withDots={false}
+            chartConfig={{
+              backgroundColor: theme.chartBg,
+              backgroundGradientFrom: theme.chartBg,
+              backgroundGradientTo: theme.chartBg,
+              decimalPlaces: 0,
+              color: (opacity = 1) => `rgba(255, 59, 48, ${opacity})`,
+              labelColor,
+            }}
+            bezier
+            style={styles.chart}
+          />
+        ) : (
+          <Text style={[styles.chartHint, { color: theme.subText }]}>
+            Giá trị raw đang được ẩn hoặc không có dữ liệu.
+          </Text>
+        )}
+        {alcoholRawAvailable && <Text style={[styles.chartHint, { color: theme.subText }]}>Raw ADC dùng để phân loại cồn.</Text>}
       </View>
 
       <View style={[styles.chartCard, { backgroundColor: theme.card }]}>
         <View style={styles.titleRow}>
-          <Text style={[styles.chartTitle, { color: theme.text }]}>MPU6050 (Gia tá»‘c & Gyro)</Text>
+          <Text style={[styles.chartTitle, { color: theme.text }]}>MPU6050 (Gia tốc & Gyro)</Text>
         </View>
         <LineChart
           data={{
             labels: chartLabels,
-            legend: ['Gia tá»‘c (g)', 'Tá»‘c Ä‘á»™ quay (dps Ã· 10)'],
+            legend: ['Gia tốc (g)', 'TĐQ (dps ÷ 10)'],
             datasets: [
               { data: accelHistory, color: (opacity = 1) => `rgba(0, 122, 255, ${opacity})`, strokeWidth: 2 },
               { data: gyroHistory.map((value) => value / 10), color: (opacity = 1) => `rgba(156, 39, 176, ${opacity})`, strokeWidth: 2 },
@@ -91,9 +117,9 @@ export default function TelemetryCharts({ status, alcoholHistory, accelHistory, 
       </View>
 
       <View style={[styles.statusCard, { backgroundColor: theme.card, borderLeftColor: status.fall_accident_alert || status.is_sos_pressed ? '#FF3B30' : '#4CAF50' }]}>
-        <Text style={[styles.statusLabel, { color: theme.subText }]}>ðŸš¨ Cáº£m biáº¿n va Ä‘áº­p / MPU6050:</Text>
+        <Text style={[styles.statusLabel, { color: theme.subText }]}>🚨 Cảm biến va đập / MPU6050:</Text>
         <Text style={[styles.statusValue, { color: status.fall_accident_alert || status.is_sos_pressed ? '#FF3B30' : '#4CAF50' }]}>
-          {status.fall_accident_alert ? 'PHÃT HIá»†N TÃ‰ NGÃƒ!' : status.is_sos_pressed ? 'BÃO Äá»˜NG SOS!' : 'An toÃ n - BÃ¬nh thÆ°á»ng'}
+          {status.fall_accident_alert ? 'PHÁT HIỆN TÉ NGÃ!' : status.is_sos_pressed ? 'BÁO ĐỘNG SOS!' : 'An toàn - Bình thường'}
         </Text>
       </View>
     </>
